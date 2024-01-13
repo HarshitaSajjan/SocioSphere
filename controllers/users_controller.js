@@ -22,23 +22,47 @@ module.exports.signIn = function(req, res){
 }
 
 //get the sign up data
-module.exports.create = function(req, res){
-    if(req.body.password != req.body.confrim_password){
+/*module.exports.create = async function(req, res){
+    if(req.body.password != req.body.confirm_password){
         return res.redirect('back');
     }
-    User.findOne({email:req.body.email}, function(err,user){
+    const existingUser = await User.findOne({email:req.body.email}, function(err,user){
         if(err){console.log('Error in finding user in singing up'); return}
-        if(!user){
-            User.create(req.body, function(err,user){
+        if(!existingUser){
+           const newUSer = User.create(req.body, function(err,user){
                 if(err){console.log('Error in creating user while singing up'); return}
-
+                return res.redirect('/users/sign-in');
             })
         }
+        else{
+                return res.redirect('back');
+            }
+            
+    });
 
-    
-    })
+}*/
+//const User = require('../models/user');
 
-}
+module.exports.create = async function (req, res) {
+    try {
+        if (req.body.password !== req.body.confirm_password) {
+            return res.redirect('back');
+        }
+
+        const existingUser = await User.findOne({ email: req.body.email });
+
+        if (!existingUser) {
+            const newUser = await User.create(req.body);
+            return res.redirect('/users/sign-in');
+        } else {
+            return res.redirect('back');
+        }
+    } catch (error) {
+        console.error('Error in user creation:', error);
+        return res.status(500).send('Internal Server Error');
+    }
+};
+
 
 //sign in and create a session for the user
 module.exports.createSession = function(req, res){
