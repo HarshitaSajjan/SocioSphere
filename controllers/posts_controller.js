@@ -20,7 +20,6 @@ module.exports.create = async function(req, res) {
     try {
         const { content } = req.body;
         const user = req.user._id; // Assuming req.user contains the current user information
-
         // Create a new post
         const newPost = await Post.create({ content, user });
 
