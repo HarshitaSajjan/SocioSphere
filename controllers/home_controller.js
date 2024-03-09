@@ -1,34 +1,9 @@
 const Post = require('../models/post');
-
-
-//module.exports.home = function(req, res){
-    //return res.end('<h1> Express is up for SocioSphere! </h1>');
-   //console.log(req.cookies);
-   // res.cookie('user_id' , 25);
-
-
-  /* Post.find({}, function(err, posts){
-    return res.render('home',{
-        title: " SocioSphere|Home",
-        posts: posts
-   });
-});*/
-// populate the user of each post
-  /*  Post.find({}).populate('user').exec(function(err, posts){
-        return res.render('home',{
-            title: " SocioSphere|Home",
-            posts: posts
-       });
-    })
-}
-*/
-
-
-//module.export.actionName = function(req,res){}
+const User = require('../models/user');
 
 
 
-module.exports.home = function(req, res){
+/*module.exports.home = function(req, res){
     Post.find({})
     .populate('user')
     .populate({
@@ -40,10 +15,15 @@ module.exports.home = function(req, res){
     
     .exec()
         .then(posts => {
-            return res.render('home', {
-                title: "SocioSphere | Home",
-                posts: posts
-            });
+
+            User.find{}, function(err,users){
+                return res.render('home', {
+                    title: "SocioSphere | Home",
+                    posts: posts,
+                    user: req.user
+            }
+            
+            );
         })
         .catch(err => {
             // Handle error
@@ -51,3 +31,49 @@ module.exports.home = function(req, res){
             return res.status(500).send('Internal Server Error');
         });
 };
+*/
+
+
+module.exports.home = async function(req, res){
+
+    try{
+        let posts = await Post.find({})
+    .populate('user')
+    .populate({
+        path: 'comments',
+        populate: {
+            path: 'user'
+        }
+    })
+    /*.exec(function(err, posts){     
+    })
+    */
+    let users = awaitUser.find({});
+    /* function(err, users){*/
+        return res.render('home', {
+            title: "SocioSphere | Home",
+            posts:  posts,
+            all_users: users
+        });
+  //  });      
+
+    }catch(err){
+        console.log('Error', err);
+        return;
+    }
+    // console.log(req.cookies);
+    // res.cookie('user_id', 25);
+
+    // Post.find({}, function(err, posts){
+    //     return res.render('home', {
+    //         title: "Codeial | Home",
+    //         posts:  posts
+    //     });
+    // });
+
+    // populate the user of each post
+   
+
+}
+
+// module.exports.actionName = function(req, res){}
