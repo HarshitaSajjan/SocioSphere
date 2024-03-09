@@ -3,37 +3,6 @@ const User = require('../models/user');
 
 
 
-/*module.exports.home = function(req, res){
-    Post.find({})
-    .populate('user')
-    .populate({
-        path: 'comments',
-        populate: {
-            path: 'comments'
-        }
-    })
-    
-    .exec()
-        .then(posts => {
-
-            User.find{}, function(err,users){
-                return res.render('home', {
-                    title: "SocioSphere | Home",
-                    posts: posts,
-                    user: req.user
-            }
-            
-            );
-        })
-        .catch(err => {
-            // Handle error
-            console.error('Error fetching posts:', err);
-            return res.status(500).send('Internal Server Error');
-        });
-};
-*/
-
-
 module.exports.home = async function(req, res){
 
     try{
@@ -48,7 +17,7 @@ module.exports.home = async function(req, res){
     /*.exec(function(err, posts){     
     })
     */
-    let users = awaitUser.find({});
+    let users = await User.find({});
     /* function(err, users){*/
         return res.render('home', {
             title: "SocioSphere | Home",

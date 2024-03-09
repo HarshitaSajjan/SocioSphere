@@ -23,9 +23,10 @@ module.exports.create = async function(req, res) {
         const newPost = await Post.create({ content, user });
 
         // Redirect to a suitable route after successfully creating the post
+        req.flash('success', 'Post published!');
         return res.redirect('/'); // Redirect to home page for example
     } catch (error) {
-        console.error('Error in creating post:', error);
+        req.flash('Error in creating post', error);
         return res.redirect('back'); // Redirect back to the previous page in case of an error
     }
 };
@@ -41,16 +42,18 @@ module.exports.destroy = async function(req,res){
     
         await Comment.deleteMany({
             post: req.params.id}); 
+            req.flash('success', 'Post and associated comments deleted');
             return res.redirect('back');
     
             /*function(err){
                 return res.redirect('back');
             });*/
         }else{
+            req.flash('error', 'You cannot delete this Post');
             return res.redirect('back');
         }
     }catch{
-        console.error('Error in deleting comment', error);
+        req.flash('Error in deleting comment', error);
         return res.redirect('back');
     }
 };
